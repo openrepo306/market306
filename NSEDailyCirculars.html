@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSE Circulars</title>
+</head>
+<body>
+    <h1>NSE Circulars</h1>
+    <div id="rss-feed"></div>
+    <script>
+        fetch('https://nsearchives.nseindia.com/content/RSS/Circulars.xml')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(data, 'application/xml');
+                const items = xml.querySelectorAll('item');
+                let html = '';
+                items.forEach(item => {
+                    const title = item.querySelector('title').textContent;
+                    const link = item.querySelector('link').textContent;
+                    html += `<p><a href="${link}">${title}</a></p>`;
+                });
+                document.getElementById('rss-feed').innerHTML = html;
+            });
+    </script>
+</body>
+</html>
